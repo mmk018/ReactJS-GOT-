@@ -16,23 +16,66 @@ export default class GotService {
         return await res.json();    
     
     };
-    getAllCharacters() {
-        return this.getResource('/characters?page=5&pageSize=10');
+    async getAllCharacters() {
+        const res = await this.getResource('/characters?page=5&pageSize=10');//here we get an aaray
+        return res.map(this._transformCharacter);//with map we looping throm and transfrom it for us into object
     }
-    getCharacter(id) {
-        return this.getResource(`/characters/${id}`);
+    async getCharacter(id) {
+        const character = await this.getResource(`/characters/${id}`);
+        return this._transformCharacter(character);
+        
     }
-    getAllHouses() {
-        return this.getResource('/houses/');
+    async getAllHouses() {
+        const res = await this.getResource('/houses/');
+        return res.map(this._transformCharacter);
     }
-    getHouse(id) {
-        return this.getResource(`/houses/${id}/`);
+    async getHouse(id) {
+        const house = await this.getResource(`/houses/${id}/`);
+        return this._transformCharacter(house);
+
     }
-    getAllBooks() {
-        return this.getResource('/books/');
+    async getAllBooks() {
+        const res = await this.getResource('/books/');
+        return res.map(this._transformCharacter);
+
     }
-    getBook(id) {
-        return this.getResource(`/books/${id}/`);
+    async getBook(id) {
+        const book = await this.getResource(`/books/${id}/`);
+        return this._transformCharacter(book);
+    }
+
+    _transformCharacter(char) {
+        return {
+            name: char.name ? char.name : 'No Information',
+            born: char.born ? char.born : 'No Information',
+
+            gender: char.gender ? char.gender : 'No Information',
+
+            died: char.died ? char.died : 'No Information',
+
+            culture: char.culture ? char.culture : 'No Information'  
+        }
+    }
+
+    _transformHouse(house) {
+        return {
+            name: house.name,
+            region: house.region,
+            words: house.words,
+            titles: house.titles,
+            overlord: house.overlord,
+            ancestralWeapons: house.ancestralWeapons
+        }
+
+    }
+
+    _transformBook(book) {
+        return {
+            name: book.name,
+            numberOfPages: book.numberOfPages,
+            publiser: book.publiser,
+            released: book.released
+        }
     }
 
 }

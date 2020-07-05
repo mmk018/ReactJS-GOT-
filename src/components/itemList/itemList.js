@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 const comStyles = document.querySelector('.container');
 
-console.log(comStyles);
+/* console.log(window.getComputedStyle(comStyles)); */
 
 
 const UlNormal = styled.ul`
