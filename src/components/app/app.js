@@ -4,6 +4,20 @@ import Header from '../header';
 import RandomChar from '../randomChar';
 import ItemList from '../itemList';
 import CharDetails from '../charDetails';
+import GotService from '../../services/gotService';
+
+
+const library = new GotService();
+library.getAllHouses()
+    .then(item => item.forEach(element => {
+        console.log(element.name);
+        
+    }));
+    
+
+
+
+
 
 
 const App = () => {

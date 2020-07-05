@@ -1,20 +1,58 @@
 import React, {Component} from 'react';
-import './itemList.css';
+/* import './itemList.css'; */
+import styled from 'styled-components';
+
+
+const comStyles = document.querySelector('.container');
+
+console.log(comStyles);
+
+
+const UlNormal = styled.ul`
+    display: flex;
+    background-color: #fff;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+    cursor: pointer;
+    li {
+        
+            position: relative;
+            display: block;
+            padding: 0.75rem 1.25rem;
+            background-color: #fff;
+            border-top: 1px solid rgba(0, 0, 0, 0.125);
+            
+            }
+            li:first-child {
+                border: none !important;
+                
+            }    
+        
+        
+
+    } 
+    
+    
+`
+
 export default class ItemList extends Component {
 
     render() {
         return (
-            <ul className="item-list list-group">
-                <li className="list-group-item">
+            
+                <UlNormal>
+                <li>
                     John Snow
                 </li>
-                <li className="list-group-item">
+                <li>
                     Brandon Stark
                 </li>
-                <li className="list-group-item">
+                <li>
                     Geremy
                 </li>
-            </ul>
+            </UlNormal>
+            
         );
     }
 }

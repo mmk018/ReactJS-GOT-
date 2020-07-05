@@ -26,7 +26,25 @@ const HeaderLinks = styled.ul`
     }
 `;
 
+
+const Button = styled.button`
+width: 100px;
+height: 20px;
+text-align: center;
+font-size: 10px;
+border: none;
+
+padding: 5px;
+
+`;
+
+function clickme (e) {
+    alert(`${e.target}`);
+    
+}
+
 const Header = () => {
+    
     return (
         <HeaderBlock>
             <HeaderTitle>
@@ -34,7 +52,7 @@ const Header = () => {
                 Game of Thrones DB
                 </a>
             </HeaderTitle>
-            <HeaderLinks>
+            {<HeaderLinks>
                 <li>
                     <a href="#">Characters</a>
                 </li>
@@ -44,7 +62,8 @@ const Header = () => {
                 <li>
                     <a href="#">Books</a>   
                 </li>
-            </HeaderLinks>
+            </HeaderLinks>}
+            <Button onClick={clickme}>Styled Button</Button>
         </HeaderBlock>
     );
 };
