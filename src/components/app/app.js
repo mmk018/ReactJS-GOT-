@@ -1,5 +1,5 @@
 import React from 'react';
-import {Col, Row, Container} from 'reactstrap';
+import {Col, Row, Container, ButtonToggle} from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
 import ItemList from '../itemList';
@@ -16,6 +16,13 @@ library.getAllHouses()
     
 
 
+const hideMe = () => {
+    const random = document.querySelector('.random-block')
+    random.classList.toggle('hide');
+    
+}
+
+
 
 
 
@@ -29,7 +36,10 @@ const App = () => {
             <Container>
                 <Row>
                     <Col lg={{size: 5, offset: 0}}>
+                    <button id='btn' onClick={hideMe
+                    } >Show/Hide</button>
                         <RandomChar/>
+                        
                     </Col>
                 </Row>
                 <Row>
@@ -46,3 +56,9 @@ const App = () => {
 };
 
 export default App;
+
+
+/* document.querySelector('#btn').addEventListener('click', ()=>{
+    RandomChar.classList.toggle('hide');
+
+}) */

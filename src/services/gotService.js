@@ -59,22 +59,22 @@ export default class GotService {
 
     _transformHouse(house) {
         return {
-            name: house.name,
-            region: house.region,
-            words: house.words,
-            titles: house.titles,
-            overlord: house.overlord,
-            ancestralWeapons: house.ancestralWeapons
+            name: house.name ? house.name : 'No Information',
+            region: house.region ? house.region : 'No Information',
+            words: house.words ? house.words : 'No Information',
+            titles: house.titles ? house.titles : 'No Information',
+            overlord: house.overlord ? house.overlord : 'No Information',
+            ancestralWeapons: house.ancestralWeapons ? house.ancestralWeapons : 'No Information'
         }
 
     }
 
     _transformBook(book) {
         return {
-            name: book.name,
-            numberOfPages: book.numberOfPages,
-            publiser: book.publiser,
-            released: book.released
+            name: book.name ? book.name : 'No Information' ,
+            numberOfPages: book.numberOfPages ? book.numberOfPages : 'No Information' ,
+            publiser: book.publiser ? book.publiser : 'No Information' ,
+            released: book.released ? book.released : 'No Information' 
         }
     }
 

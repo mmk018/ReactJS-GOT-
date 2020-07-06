@@ -10,3 +10,17 @@
 .term {
     font-weight: bold;
 }
+.hide {
+    display: none;
+}
+#btn {
+    padding: 10px 20px;
+    border-radius: 20px;
+    background-color: #fff;
+    margin-bottom: 20px;
+
+}
+#btn:focus {
+    outline: none;
+    box-shadow: none;
+}
