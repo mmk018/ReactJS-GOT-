@@ -1,64 +1,96 @@
-import React from 'react';
-import {Col, Row, Container, ButtonToggle} from 'reactstrap';
+import React, {Component} from 'react';
+import {Col, Row, Container} from 'reactstrap';
 import Header from '../header';
 import RandomChar from '../randomChar';
 import ItemList from '../itemList';
 import CharDetails from '../charDetails';
 import GotService from '../../services/gotService';
+import ErrorMessage from '../errorMessage';
+import CharacterPage from '../characterPage';
+////16:05  99
 
 
-const library = new GotService();
-library.getAllHouses()
-    .then(item => item.forEach(element => {
-        console.log(element.name);
+
+
+
+
+export default class App extends Component  {
+    
+    state =  {
+        hide:false,
+       
+        error: false
+    }
+
+    componentDidCatch() {
         
-    }));
+        this.setState({
+            error:true
+        })
+    }
+
+
+    hideMe = ()=>{
+        this.setState({
+            hide: !this.state.hide
+        })
+    }
+    constructor () {
+        super();
+
+        const library = new GotService();
+        library.getAllHouses()
+        .then(item => item.forEach(element => {
+            console.log(element.name);
+            
+        }));
+        
     
-
-
-const hideMe = () => {
-    const random = document.querySelector('.random-block')
-    random.classList.toggle('hide');
     
-}
+    
+    
+   
+    
+    
+    }
+    button = <button id='btn' onClick={this.hideMe}>HideMe</button>
 
 
 
 
+   
+
+    
+    
+    render() {
+
+        if(this.state.error) {
+            return <ErrorMessage/>
+        }
 
 
-const App = () => {
-    return (
-        <> 
-            <Container>
-                <Header />
-            </Container>
-            <Container>
-                <Row>
-                    <Col lg={{size: 5, offset: 0}}>
-                    <button id='btn' onClick={hideMe
-                    } >Show/Hide</button>
-                        <RandomChar/>
-                        
-                    </Col>
-                </Row>
-                <Row>
-                    <Col md='6'>
-                        <ItemList />
-                    </Col>
-                    <Col md='6'>
-                        <CharDetails />
-                    </Col>
-                </Row>
-            </Container>
-        </>
-    );
+        return (
+
+            <> 
+                <Container>
+                    <Header />
+                </Container>
+                <Container>
+                    <Row>
+                        <Col lg={{size: 5, offset: 0}}>
+                            {this.button}
+                           {this.state.hide ? null : <RandomChar/>}
+                        </Col>
+                    </Row>
+                    <CharacterPage></CharacterPage>
+                </Container>
+            </>
+        );
+    
+    }
+    
 };
 
-export default App;
 
 
-/* document.querySelector('#btn').addEventListener('click', ()=>{
-    RandomChar.classList.toggle('hide');
 
-}) */

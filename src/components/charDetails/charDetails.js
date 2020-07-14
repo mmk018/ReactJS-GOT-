@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './charDetails.css';
 import styled from 'styled-components';
-
+import gotService from '../../services/gotService';
 
 const CharDetailsDiv = styled.div`
     background-color: #fff;
@@ -63,26 +63,64 @@ const CharDetailsDiv = styled.div`
 
 export default class CharDetails extends Component {
 
+    gotService = new gotService();
+
+    state = {
+        char: null
+    }
+
+    componentDidMount() {
+        this.updateChar();
+    }
+
+    componentDidUpdate(prevProps) {
+        if(this.props.charId !== prevProps.charId) {
+            this.updateChar();
+        }
+    }
+
+    updateChar(){
+        const {charId} = this.props;
+        if(!charId){
+            return;
+        }
+        this.gotService.getCharacter(charId)
+            .then((char)=>{
+                this.setState({char})
+            })
+            
+    }
+
     render() {
+
+        if(!this.state.char) {
+            return <span className='select-error'>Please select a character</span>
+        }
+
+        const {name, gender, born, died, culture} = this.state.char;
+
+
+
+
         return (
             <CharDetailsDiv >
-                <h4>John Snow</h4>
+                <h4>{name}</h4>
                 <ul>
                     <li noborder='true'>
                         <span>Gender</span>
-                        <span>male</span>
+                        <span>{gender}</span>
                     </li>
                     <li>
                         <span>Born</span>
-                        <span>1783</span>
+                        <span>{born}</span>
                     </li>
                     <li>
                         <span>Died</span>
-                        <span>1820</span>
+                        <span>{died}</span>
                     </li>
                     <li>
                         <span>Culture</span>
-                        <span>First</span>
+                        <span>{culture}</span>
                     </li>
                 </ul>
             </CharDetailsDiv>

@@ -63,7 +63,7 @@ const Header = () => {
                     <a href="#">Books</a>   
                 </li>
             </HeaderLinks>}
-            <Button onClick={clickme}>Styled Button</Button>
+            
         </HeaderBlock>
     );
 };

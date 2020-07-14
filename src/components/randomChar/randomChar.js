@@ -7,18 +7,28 @@ import ErrorMessage from '../errorMessage/'
 
 export default class RandomChar extends Component {
 
-    constructor() {
-        super();
-        this.updateChar();
-
-    }
+    
 
 
 
     gotService = new gotService;
     state = {
       char: {},
-      loading: true 
+      loading: true,
+      hide: false 
+    }
+
+    componentDidMount() {
+        console.log('mounting');
+        this.updateChar();
+        this.timerId = setInterval(this.updateChar, 1500);
+        
+    }
+
+    componentWillUnmount() {
+        console.log('unmounting');
+        
+        clearInterval(this.timerId);
     }
 
     onCharLoaded = (char)=> {
@@ -41,34 +51,49 @@ export default class RandomChar extends Component {
     }
 
 
-    updateChar() {
-        /* const id = Math.floor(Math.random() *140 +25); *///Range from 25 till 140
-        const id = 13000000000;
+    updateChar =()=> {
+       
+        
+        const id = Math.floor(Math.random() *140 +25);//Range from 25 till 140
+        /* const id = 13000000000; *///to check for errors
         this.gotService.getCharacter(id)
             .then(this.onCharLoaded)
             .catch(this.onError);
     }
 
 
+    /* hideMe = () => {
+        this.setState({
+            hide: !this.state.hide
+        })
+    } */
+
+
     render() {
 
 
-        const {char , loading, error} = this.state;
+        const {char , loading, error, hide} = this.state;
 
-        const errorMessage = error ? <ErrorMessage/> : null;
+        
 
-        const spinner = loading ?  <Spinner/> : null;
+        const errorMessage = (error && !hide)  ? <ErrorMessage/> : null;
+
+        const spinner = (loading && !hide) ?  <Spinner/> : null;
         
-        const content = !(loading || error) ? <View char={char}></View> : null  ;
+        const content = !(loading || error || hide) ? <View char={char}></View> : null  ;
         
+
 
 
         return (
+            <>
             <div className="random-block rounded">
+                
                 {errorMessage}
                 {spinner}
                 {content}
             </div>
+            </>
         );
     }
 }
