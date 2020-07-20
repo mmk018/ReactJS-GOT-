@@ -22,6 +22,8 @@ export default class GotService {
     }
     async getCharacter(id) {
         const character = await this.getResource(`/characters/${id}`);
+       /*  console.log(character); */
+        
         return this._transformCharacter(character);
         
     }
@@ -53,7 +55,8 @@ export default class GotService {
 
             died: char.died ? char.died : 'No Information',
 
-            culture: char.culture ? char.culture : 'No Information'  
+            culture: char.culture ? char.culture : 'No Information',
+            url: char.url  
         }
     }
 

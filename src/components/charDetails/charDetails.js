@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import './charDetails.css';
 import styled from 'styled-components';
 import gotService from '../../services/gotService';
+import Spinner from '../spinner';
+import ErrorMessage from '../errorMessage';
 
 const CharDetailsDiv = styled.div`
     background-color: #fff;
@@ -66,7 +68,8 @@ export default class CharDetails extends Component {
     gotService = new gotService();
 
     state = {
-        char: null
+        char: null,
+        error: false
     }
 
     componentDidMount() {
@@ -87,17 +90,31 @@ export default class CharDetails extends Component {
         this.gotService.getCharacter(charId)
             .then((char)=>{
                 this.setState({char})
+            }).catch((error)=>{
+                this.setState({
+                    error
+                })
             })
             
     }
 
     render() {
 
-        if(!this.state.char) {
-            return <span className='select-error'>Please select a character</span>
+        if(this.state.error) {
+            return <>
+            <CharDetailsDiv >
+               
+            
+            <ErrorMessage/>
+            </CharDetailsDiv>
+            </>
+        } else if (!this.state.char) {
+            /* return <span className='select-error'>Please select a character</span> */
+            return <Spinner></Spinner>
+
         }
 
-        const {name, gender, born, died, culture} = this.state.char;
+        const {name, gender, born, died, culture, url} = this.state.char;
 
 
 

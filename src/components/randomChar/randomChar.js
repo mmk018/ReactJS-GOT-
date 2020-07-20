@@ -15,7 +15,7 @@ export default class RandomChar extends Component {
     state = {
       char: {},
       loading: true,
-      hide: false 
+      hide: true 
     }
 
     componentDidMount() {

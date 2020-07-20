@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import GotService from '../../services/gotService';
 import Spinner from '../spinner';
+import ErrorMessage from '../errorMessage';
 
 
 const comStyles = document.querySelector('.container');
@@ -43,14 +44,22 @@ export default class ItemList extends Component {
 
 
     state = {
-        charList: null
+        charList: null,
+        error: false
     }
 
     componentDidMount() {
         this.gotService.getAllCharacters()
         .then((charList) => {
+            console.log(charList);
+            
             this.setState({
                 charList
+            })
+
+        }).catch((error)=>{
+            this.setState({
+                error
             })
         })
 
@@ -61,8 +70,17 @@ export default class ItemList extends Component {
         return arr.map((item, i) => {
             return (
                 <li key={i}
-                onClick={() => this.props.onCharSelected(41 + i)}>
+                onClick={() => {
+                    console.log(item.url.replace('https://www.anapioficeandfire.com/api/characters/', ''));
+                    
+                     
+
+                    this.props.onCharSelected(item.url.replace('https://www.anapioficeandfire.com/api/characters/', ''))
+                }}>
                     {item.name}
+                    
+                    
+                    
                 </li>
             )
         })
@@ -70,16 +88,25 @@ export default class ItemList extends Component {
 
 
     render() {
-        const {charList} = this.state;
+        const {charList, error} = this.state;
 
         
 
 
 
 
-        if (!charList) {
+        if (error) {
+            return <>
+            <UlNormal>
+               
+
+            <ErrorMessage/>
+            </UlNormal>
+            
+            </>
+        } else if (!charList) {
             return <Spinner/>
-        }
+        } 
 
 
         const items = this.renderItems(charList);
