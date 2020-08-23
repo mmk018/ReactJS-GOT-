@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 /* import './itemList.css'; */
 import styled from 'styled-components';
-import GotService from '../../services/gotService';
+
 import Spinner from '../spinner';
 import ErrorMessage from '../errorMessage';
 
@@ -40,21 +40,23 @@ const UlNormal = styled.ul`
 `
 
 export default class ItemList extends Component {
-    gotService = new GotService();
+    
 
 
     state = {
-        charList: null,
+        itemList: null,
         error: false
     }
 
     componentDidMount() {
-        this.gotService.getAllCharacters()
-        .then((charList) => {
-            console.log(charList);
+        const {getData} = this.props;
+
+        getData()
+        .then((itemList) => {
+            console.log(itemList);
             
             this.setState({
-                charList
+                itemList
             })
 
         }).catch((error)=>{
@@ -68,6 +70,10 @@ export default class ItemList extends Component {
 
     renderItems(arr) {
         return arr.map((item, i) => {
+            const {id} = item;
+            const label = this.props.renderItem(item);
+
+
             return (
                 <li key={i}
                 onClick={() => {
@@ -75,9 +81,9 @@ export default class ItemList extends Component {
                     
                      
 
-                    this.props.onCharSelected(item.url.replace('https://www.anapioficeandfire.com/api/characters/', ''))
+                    this.props.onItemSelected(item.url.replace('https://www.anapioficeandfire.com/api/characters/', ''))
                 }}>
-                    {item.name}
+                    {label}
                     
                     
                     
@@ -88,7 +94,7 @@ export default class ItemList extends Component {
 
 
     render() {
-        const {charList, error} = this.state;
+        const {itemList, error} = this.state;
 
         
 
@@ -104,12 +110,12 @@ export default class ItemList extends Component {
             </UlNormal>
             
             </>
-        } else if (!charList) {
+        } else if (!itemList) {
             return <Spinner/>
         } 
 
 
-        const items = this.renderItems(charList);
+        const items = this.renderItems(itemList);
 
 
         return (

@@ -61,7 +61,16 @@ const CharDetailsDiv = styled.div`
 
 
 
+const Field = ({char, field, label})=>{
+ return(
+    <li noborder='true'>
+        <span>{label}</span>
+        <span>{char[field]}</span>
+    </li>
+ )
+}
 
+export {Field}
 
 export default class CharDetails extends Component {
 
@@ -114,7 +123,8 @@ export default class CharDetails extends Component {
 
         }
 
-        const {name, gender, born, died, culture, url} = this.state.char;
+        const {char} = this.state;
+        const {name} = char;
 
 
 
@@ -123,22 +133,11 @@ export default class CharDetails extends Component {
             <CharDetailsDiv >
                 <h4>{name}</h4>
                 <ul>
-                    <li noborder='true'>
-                        <span>Gender</span>
-                        <span>{gender}</span>
-                    </li>
-                    <li>
-                        <span>Born</span>
-                        <span>{born}</span>
-                    </li>
-                    <li>
-                        <span>Died</span>
-                        <span>{died}</span>
-                    </li>
-                    <li>
-                        <span>Culture</span>
-                        <span>{culture}</span>
-                    </li>
+                    {
+                        React.Children.map(this.props.children, (child)=>{
+                           return React.cloneElement(child, {char})
+                        })
+                    }
                 </ul>
             </CharDetailsDiv>
         );
