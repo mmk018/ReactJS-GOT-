@@ -2,9 +2,10 @@ import React, {Component} from 'react';
 import {Col, Row, Container} from 'reactstrap';
 import GotService from '../../services/gotService';
 import ItemList from '../itemList';
-import CharDetails,{Field} from '../charDetails';
+import itemDetails,{Field} from '../itemDetails/itemDetails';
 import ErrorMessage from '../errorMessage';
 import RowBlock from '../rowBlock';
+import ItemDetails from '../itemDetails/itemDetails';
 
 
 
@@ -38,20 +39,20 @@ export default class CharacterPage extends Component {
                             getData={this.gotService.getAllCharacters}
                              renderItem={({name, gender})=> `${name} (${gender})`}/>
         );
-        const charDetails = (
-            <CharDetails charId={this.state.selectedChar} >
+        const itemDetails = (
+            <itemDetails charId={this.state.selectedChar} >
                 <Field field='gender' label='Gender'></Field>
                 <Field field='born' label='Born'></Field>
                 <Field field='died' label='Died'></Field>
                 <Field field='culture' label='Culture'></Field>
-            </CharDetails>
+            </itemDetails>
 
 
         )
 
 
         return (
-            <RowBlock left={itemList} right={charDetails}></RowBlock>
+            <RowBlock left={itemList} right={itemDetails}></RowBlock>
         )
     }
 }

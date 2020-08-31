@@ -1,130 +1,87 @@
 import React, {Component} from 'react';
 import './randomChar.css';
 import gotService from '../../services/gotService';
-import { ThemeConsumer } from 'styled-components';
 import Spinner from '../spinner';
-import ErrorMessage from '../errorMessage/'
+import ErrorMessage from '../errorMessage';
 
 export default class RandomChar extends Component {
 
-    
-
-
-
-    gotService = new gotService;
+    gotService = new gotService();
     state = {
-      char: {},
-      loading: true,
-      hide: false
+        char: {},
+        loading: true,
+        error: false
     }
 
     componentDidMount() {
-        console.log('mounting');
         this.updateChar();
-        this.timerId = setInterval(this.updateChar, 1500);
-        
+        this.timerId = setInterval(this.updateChar, 15000);
     }
 
-    componentWillUnmount() {
-        console.log('unmounting');
-        
+    componentWillUnmount(){
         clearInterval(this.timerId);
     }
 
-    onCharLoaded = (char)=> {
+    onCharLoaded = (char) => {
         this.setState({
             char,
-            loading: false,
-            error: false
-
-
-    });
+            loading: false
+        })
     }
-
 
     onError = (err) => {
         this.setState({
             error: true,
-            loading: false,
-
+            loading: false
         })
     }
 
-
-    updateChar =()=> {
-       
-        
-        const id = Math.floor(Math.random() *140 +25);//Range from 25 till 140
-        /* const id = 13000000000; *///to check for errors
+    updateChar = () => {
+        const id = Math.floor(Math.random()*140 + 25); //25-140
         this.gotService.getCharacter(id)
             .then(this.onCharLoaded)
             .catch(this.onError);
     }
 
-
-    /* hideMe = () => {
-        this.setState({
-            hide: !this.state.hide
-        })
-    } */
-
-
     render() {
+        const { char, loading, error } = this.state;
 
-
-        const {char , loading, error, hide} = this.state;
-
-        
-
-        const errorMessage = (error && !hide)  ? <ErrorMessage/> : null;
-
-        const spinner = (loading && !hide) ?  <Spinner/> : null;
-        
-        const content = !(loading || error || hide) ? <View char={char}></View> : null  ;
-        
-
-
+        const errorMessage = error ? <ErrorMessage/> : null;
+        const spinner = loading ? <Spinner/> : null;
+        const content = !(loading || error) ? <View char={char}/> : null;
 
         return (
-            <>
             <div className="random-block rounded">
-                
                 {errorMessage}
                 {spinner}
                 {content}
             </div>
-            </>
         );
     }
 }
-
-
 const View = ({char}) => {
     const {name, gender, born, died, culture} = char;
-
     return (
         <>
-                <h4>Random Character: {name}</h4>
-                <ul className="list-group list-group-flush">
-                    <li className="list-group-item d-flex justify-content-between">
-                        <span className="term">Gender </span>
-                        <span>{gender}</span>
-                    </li>
-                    <li className="list-group-item d-flex justify-content-between">
-                        <span className="term">Born </span>
-                        <span>{born}</span>
-                    </li>
-                    <li className="list-group-item d-flex justify-content-between">
-                        <span className="term">Died </span>
-                        <span>{died}</span>
-                    </li>
-                    <li className="list-group-item d-flex justify-content-between">
-                        <span className="term">Culture </span>
-                        <span>{culture}</span>
-                    </li>
-                </ul>
-
+            <h4>Random Character: {name}</h4>
+            <ul className="list-group list-group-flush">
+                <li className="list-group-item d-flex justify-content-between">
+                    <span className="term">Gender </span>
+                    <span>{gender}</span>
+                </li>
+                <li className="list-group-item d-flex justify-content-between">
+                    <span className="term">Born </span>
+                    <span>{born}</span>
+                </li>
+                <li className="list-group-item d-flex justify-content-between">
+                    <span className="term">Died </span>
+                    <span>{died}</span>
+                </li>
+                <li className="list-group-item d-flex justify-content-between">
+                    <span className="term">Culture </span>
+                    <span>{culture}</span>
+                </li>
+            </ul>
         </>
     )
-};
-
+}

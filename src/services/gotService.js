@@ -1,93 +1,90 @@
 export default class GotService {
-    constructor () {
-        this._apiBase = 'https://www.anapioficeandfire.com/api';//niznee podserkivanie, stobi, ukazatj deugim razrabotsikam, sto eto statitsnie dannie
+    constructor() {
+        this._apiBase = 'https://www.anapioficeandfire.com/api';
     }
-
-
 
     getResource = async (url) => {
-        const res = await fetch(`${this._apiBase}${url}`);//fetchim nas url
+        const res = await fetch(`${this._apiBase}${url}`);
     
-    
-        if(!res.ok) {
-            throw new Error(`Could not fetch ${url}, status : ${res.status}`);
+        if (!res.ok) {
+          throw new Error(`Could not fetch ${url}` +
+            `, received ${res.status}`);
         }
-    
-        return await res.json();    
-    
-    };
-getAllCharacters= async()=> {
-        const res = await this.getResource('/characters?page=5&pageSize=10');//here we get an aaray
-        return res.map(this._transformCharacter);//with map we looping throm and transfrom it for us into object
+        return await res.json();
     }
-    getCharacter= async(id)=> {
-        const character = await this.getResource(`/characters/${id}`);
-       /*  console.log(character); */
-        
-        return this._transformCharacter(character);
-        
-    }
-    getAllHouses= async ()=> {
-        const res = await this.getResource('/houses/');
-        return res.map(this._transformCharacter);
-    }
-    getHouse= async(id)=> {
-        const house = await this.getResource(`/houses/${id}/`);
-        return this._transformCharacter(house);
 
+    getAllBooks = async () => {
+        const res = await this.getResource(`/books/`);
+        return res.map(this._transformBook);
     }
-    getAllBooks = async ()=> {
-        const res = await this.getResource('/books/');
-        return res.map(this._transformCharacter);
-
-    }
-    getBook = async (id)=> {
+    
+    getBook = async (id) => {
         const book = await this.getResource(`/books/${id}/`);
-        return this._transformCharacter(book);
+        return this._transformBook(book);
+    }
+    
+    getAllCharacters = async () => {
+        const res = await this.getResource(`/characters?page=5&pageSize=10`);
+        return res.map(this._transformCharacter);
+    }
+    
+    getCharacter = async (id) => {
+        const character = await this.getResource(`/characters/${id}`);
+        return this._transformCharacter(character);
+    }
+    
+    getAllHouses = async () => {
+        const res = await this.getResource(`/houses/`);
+        return res.map(this._transformHouse);
+    }
+    
+    getHouse = async (id) => {
+        const house = await this.getResource(`/houses/${id}/`);
+        return this._transformHouse(house);
     }
 
-    _transformCharacter(char) {
-        return {
-            name: char.name ? char.name : 'No Information',
-            born: char.born ? char.born : 'No Information',
-
-            gender: char.gender ? char.gender : 'No Information',
-
-            died: char.died ? char.died : 'No Information',
-
-            culture: char.culture ? char.culture : 'No Information',
-            url: char.url  
+    isSet(data) {
+        if (data) {
+            return data
+        } else {
+            return 'no data :('
         }
     }
 
-    _transformHouse(house) {
-        return {
-            name: house.name ? house.name : 'No Information',
-            region: house.region ? house.region : 'No Information',
-            words: house.words ? house.words : 'No Information',
-            titles: house.titles ? house.titles : 'No Information',
-            overlord: house.overlord ? house.overlord : 'No Information',
-            ancestralWeapons: house.ancestralWeapons ? house.ancestralWeapons : 'No Information'
-        }
-
+    _extractId = (item) => {
+        const idRegExp = /\/([0-9]*)$/;
+        return item.url.match(idRegExp)[1];
     }
 
-    _transformBook(book) {
+    _transformCharacter = (char) => {
         return {
-            name: book.name ? book.name : 'No Information' ,
-            numberOfPages: book.numberOfPages ? book.numberOfPages : 'No Information' ,
-            publiser: book.publiser ? book.publiser : 'No Information' ,
-            released: book.released ? book.released : 'No Information' 
-        }
+            id: this._extractId(char),
+            name: this.isSet(char.name),
+            gender: this.isSet(char.gender),
+            born: this.isSet(char.born),
+            died: this.isSet(char.died), 
+            culture: this.isSet(char.culture)
+        };
     }
 
+    _transformHouse = (house) => {
+        return {
+            id: this._extractId(house),
+            name: this.isSet(house.name),
+            region: this.isSet(house.region),
+            words: this.isSet(house.words),
+            titles: this.isSet(house.titles),
+            ancestralWeapons: this.isSet(house.ancestralWeapons)
+        };
+    }
+    
+    _transformBook = (book) => {
+        return {
+            id: this._extractId(book),
+            name: this.isSet(book.name),
+            numberOfPages: this.isSet(book.numberOfPages),
+            publisher: this.isSet(book.publisher),
+            released: this.isSet(book.released)
+        };
+    }
 }
-
-
-
-
-
-
-
-
-
