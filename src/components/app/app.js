@@ -9,6 +9,8 @@ import {BrowserRouter as Router, Route} from 'react-router-dom';
 
 import './app.css';
 
+//102 ready
+
 
 export default class App extends Component {
     gotService = new gotService();
@@ -71,3 +73,21 @@ export default class App extends Component {
     }
 
 };
+
+/* RandomChar.propTypes = {
+    interval:(props, propName, componentName)=>{
+        const value= props[propName];
+
+        if(typeof value === 'number' && !isNaN(value)){
+            return null
+        }
+        return new TypeError(`${componentName} : ${propName} must be a Number`)
+    }
+} */
+
+/* import propTypes from 'prop-types';
+
+RandomChar.propTypes= {
+    interval: propTypes.func,
+    getData: propTypes.arrayOf(propTypes.object)
+} */
