@@ -1,62 +1,50 @@
-import React, {useState, useEffect} from 'react';
+import React, {Component} from 'react';
 import './randomChar.css';
-
+import gotService from '../../services/gotService';
 import Spinner from '../spinner';
 import ErrorMessage from '../errorMessage';
 
-export default function RandomChar ({gotService}) {
+export default class RandomChar extends Component {
 
-
-
-
-   const [char, updateCharState]= useState({});
-
-   const [loading, updateLoadingState]= useState(true);
-
-   const [error, updateErrorState]= useState(false);
-
-
-   
-
-
-    let timerId;
-
-    
-
-    useEffect(() => {
-        updateChar();
-        timerId = setInterval(updateChar, 15000);
-    }, []);
-
-    useEffect(() => {
-        return () => {
-          console.log('will unmount');
-          clearInterval(timerId);
-        }
-      }, []);
-
-    
-    const onCharLoaded = (char) => {
-        updateCharState(char);
-        updateLoadingState(false);
-
+    gotService = new gotService();
+    state = {
+        char: {},
+        loading: true,
+        error: false
     }
 
-    
-    const onError = (err) => {
-        updateErrorState(true);
-        updateLoadingState(false);
+    componentDidMount() {
+        this.updateChar();
+        this.timerId = setInterval(this.updateChar, 15000);
     }
 
-    const updateChar = () => {
+    componentWillUnmount(){
+        clearInterval(this.timerId);
+    }
+
+    onCharLoaded = (char) => {
+        this.setState({
+            char,
+            loading: false
+        })
+    }
+
+    onError = (err) => {
+        this.setState({
+            error: true,
+            loading: false
+        })
+    }
+
+    updateChar = () => {
         const id = Math.floor(Math.random()*140 + 25); //25-140
-        gotService.getCharacter(id)
-            .then(onCharLoaded)
-            .catch(onError);
+        this.gotService.getCharacter(id)
+            .then(this.onCharLoaded)
+            .catch(this.onError);
     }
 
-    
-       
+    render() {
+        const { char, loading, error } = this.state;
 
         const errorMessage = error ? <ErrorMessage/> : null;
         const spinner = loading ? <Spinner/> : null;
@@ -69,7 +57,7 @@ export default function RandomChar ({gotService}) {
                 {content}
             </div>
         );
-    
+    }
 }
 const View = ({char}) => {
     const {name, gender, born, died, culture} = char;
