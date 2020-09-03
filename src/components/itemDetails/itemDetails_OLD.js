@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {Component} from 'react';
 import './itemDetails.css';
 
 
@@ -15,39 +15,41 @@ export {
     Field
 };
 
-export default function ItemDetails ({itemId, getData,children}) {
+export default class ItemDetails extends Component {
 
 
-    const [item, updateItemState] = useState(null);
+    state = {
+        item: null
+    }
 
-
-   
+    componentDidMount() {
+        this.updateItem();
+    }
     
-    useEffect(() => {
-        updateItem();
-        });
-    
-      
-  
+    componentDidUpdate(prevProps) {
+        if (this.props.itemId !== prevProps.itemId) {
+            this.updateItem();
+        }
+    }
 
-    function updateItem() {
-       
+    updateItem() {
+        const {itemId, getData} = this.props;
         if (!itemId) {
             return;
         }
 
         getData(itemId)
             .then((item) => {
-                updateItemState(item);
+                this.setState({item})
             })
     }
 
-    
+    render() {
 
-        if (!item) {
+        if (!this.state.item) {
             return <span className='select-error'>Please select item in the list</span>
         }
-        
+        const {item} = this.state;
         const {name} = item;
 
         return (
@@ -55,12 +57,12 @@ export default function ItemDetails ({itemId, getData,children}) {
                 <h4>{name}</h4>
                 <ul className="list-group list-group-flush">
                     {
-                        React.Children.map(children, (child) => {
+                        React.Children.map(this.props.children, (child) => {
                             return React.cloneElement(child, {item})
                         })
                     }
                 </ul>
             </div>
         );
-    
+    }
 }
